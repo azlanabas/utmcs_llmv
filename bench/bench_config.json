@@ -1,0 +1,17 @@
+{
+  "_comment": "Benchmark configuration. Changing the quant list or repeat count changes the METHOD — note it in the run's 'note' field so the history stays honest.",
+  "ollama_host": "http://127.0.0.1:11434",
+  "model_family": "llama3.2",
+  "model_params": "1b-instruct",
+  "quants": [
+    { "key": "q2_K",   "tag": "llama3.2:1b-instruct-q2_K" },
+    { "key": "q4_K_M", "tag": "llama3.2:1b-instruct-q4_K_M" },
+    { "key": "q8_0",   "tag": "llama3.2:1b-instruct-q8_0" }
+  ],
+  "repeats": 3,
+  "max_tokens": 256,
+  "request_timeout_s": 300,
+  "warmup": true,
+  "unload_between_quants": true,
+  "push_url": "https://llmv.utmcs.online/api/ingest"
+}

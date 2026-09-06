@@ -1,0 +1,20 @@
+{
+  "_comment": "Fixed benchmark prompts. These are part of the METHOD — changing them invalidates comparison with earlier runs. Stored in the DB alongside every measurement so a run is self-describing.",
+  "prompts": [
+    {
+      "key": "short",
+      "target_tokens": 20,
+      "text": "Explain what a token is in one sentence."
+    },
+    {
+      "key": "medium",
+      "target_tokens": 200,
+      "text": "You are reviewing a small web service written in Rust. It exposes three HTTP endpoints: one health check, one that writes a record to SQLite, and one that proxies a streaming request to another machine on a private network. Describe, in a few paragraphs, what could go wrong in production with the streaming proxy endpoint specifically, and what you would measure to detect each problem before users notice it. Be concrete about failure modes rather than general about good practice."
+    },
+    {
+      "key": "long",
+      "target_tokens": 800,
+      "text": "Below is a description of a benchmarking setup. Read it carefully and then answer the question at the end.\n\nA researcher wants to compare how much quality is lost when a language model is quantized. They take a single 1-billion-parameter instruction-tuned model and produce three variants: a 2-bit variant, a 4-bit variant, and an 8-bit variant. All three are served by the same local inference engine on the same laptop, an Apple silicon machine with 16 GB of unified memory and an 8-core GPU. The researcher sends the same three prompts to each variant: a short prompt of roughly twenty tokens, a medium prompt of roughly two hundred tokens, and a long prompt of roughly eight hundred tokens. Each prompt is sent three times to each variant, and the researcher records the time to the first token, the total wall-clock time, the number of tokens generated, the tokens generated per second, and the peak memory the model occupies while loaded. Before each variant's measurements begin, one warm-up generation is performed and discarded. Between variants, the model is explicitly unloaded from memory.\n\nThe researcher observes that the 2-bit variant is the fastest and occupies the least memory, the 8-bit variant is the slowest and occupies the most, and the 4-bit variant sits between them. However, the researcher also notices that the difference in tokens per second between the variants is smaller than the difference in file size on disk would suggest, and that the time to the first token does not scale in the same way as the tokens-per-second figure does.\n\nQuestion: explain in detail why the time to the first token and the sustained tokens-per-second rate can behave differently from one another as quantization level changes, what role the prompt length plays in that difference, and what the researcher should be careful about when drawing conclusions about output quality from this setup. Discuss what this measurement does and does not tell you."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+# backend
+backend/target/
+backend/data.db
+backend/data.db-wal
+backend/data.db-shm
+backend/.env
+
+# frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+
+# bench (Mac-side)
+bench/results/
+bench/__pycache__/
+bench/.venv/
+
+# misc
+.DS_Store
+
+# nightly SQLite snapshots
+backups/

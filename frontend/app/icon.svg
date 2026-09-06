@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="6" fill="#faf9f7"/>
+  <!-- three bars, the quant ramp: light 2-bit, mid 4-bit, dark 8-bit -->
+  <rect x="6"  y="17" width="5" height="9"  rx="2" fill="#6fa8cc"/>
+  <rect x="13.5" y="12" width="5" height="14" rx="2" fill="#2f74a3"/>
+  <rect x="21" y="6"  width="5" height="20" rx="2" fill="#0f3a58"/>
+</svg>

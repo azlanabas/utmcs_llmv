@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─────────────────────────────────────────────────────────────────────────
+   UTM-LLMV design tokens — docs/color-scheme.md
+   Every value below was validated with dataviz/scripts/validate_palette.js
+   on 2026-09-06. Re-run the validator after ANY colour change.
+   This block is the ONLY place colour values appear.
+   ───────────────────────────────────────────────────────────────────────── */
+:root {
+  --surface:     #faf9f7;
+  --surface-2:   #f2f0ec;
+  --border:      #dcd8d1;
+
+  --primary:     #0f3a58;
+  --secondary:   #2f74a3;
+  --cta:         #b5761a;
+
+  --ink:         #1a1d21;
+  --ink-2:       #4a5058;
+  --ink-3:       #6b7280;
+
+  /* Quant ramp — SEQUENTIAL, one hue. The levels are an ORDERED scale
+     (2→4→8 bit), so more bits = darker. Not categorical hues. */
+  --quant-2:     #6fa8cc;
+  --quant-4:     #2f74a3;
+  --quant-8:     #0f3a58;
+
+  /* Status — RESERVED. Never reused as a chart series. Always shipped
+     with a glyph AND a label (the accepted CVD condition). */
+  --status-good: #2f7d4f;
+  --status-warn: #b5761a;
+  --status-off:  #8c2f2f;
+}
+
+html, body {
+  background: var(--surface);
+  color: var(--ink);
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Digits must not jitter as the live counter updates. */
+.tnum { font-variant-numeric: tabular-nums; }
+
+/* Focus is always visible — `outline: none` is banned (docs/design_doc_frontend.md §7). */
+:where(a, button, input, textarea, select, [tabindex]):focus-visible {
+  outline: 2px solid var(--secondary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
