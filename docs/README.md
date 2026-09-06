@@ -26,7 +26,7 @@ Reading order for a fresh Claude session:
 1. **This file §2 (Decisions Log)** — every Phase-0 call, already resolved. Do not re-decide.
 2. **This file §3 (Verified environment)** — what was measured live on 2026-09-06.
 3. `architecture.md` — the split-brain design (Mac = compute, kerry = web) and why.
-4. `todo.md` — the phased build roadmap. **PLAN ONLY — do not build yet.**
+4. `todo.md` — the phased build roadmap, **ticked to as-built**. 7 items remain open.
 5. Everything else on demand.
 
 **The one thing that makes this project unusual:** the model does not run on the web server.
@@ -49,8 +49,8 @@ Read `architecture.md` before touching anything.
 | Tokens, components, page specs | `design_doc_frontend.md` | ✅ complete |
 | Axum services, Ollama proxy, benchmark harness | `design_doc_backend.md` | ✅ complete |
 | Palette (active + alternates) | `color-scheme.md` | ✅ complete |
-| Phased build roadmap | `todo.md` | ✅ complete — all boxes unticked |
-| Ops: what runs where, rebuild/deploy | `handover.md` | ✅ complete (pre-build; flips to as-built in Phase 7) |
+| Phased build roadmap | `todo.md` | ✅ as-built — 67 ticked, 7 open |
+| Ops: what runs where, rebuild/deploy | `handover.md` | ✅ as-built |
 | Users + admins guide | `user_guide.md` | ✅ complete |
 | Audit reports | `audits/` | — none yet |
 
@@ -65,7 +65,7 @@ Read `architecture.md` before touching anything.
 | **Architecture** | **RUST ECO** — new full-stack build, per `architecture-selector.md`. Deliberately mirrors the sibling app `/srv/utmcs/dsa` (DSA Explorer) so the two UTM teaching apps share one shape. Owner chose "Match DSA Explorer" 2026-09-06. |
 | **Compute split** | **Hybrid.** The Mac runs all inference; kerry never loads a model. kerry stores every benchmark the Mac pushes (so results pages are always up) **and** proxies `/api/live/*` to the Mac's Ollama over Tailscale when reachable, greying out with an "offline" badge when not. Owner chose "Hybrid" 2026-09-06 after the initial answers conflicted (scope 3 = live playground vs push-only = no live inference); hybrid resolves both. |
 | **Backend** | One Rust/Axum binary on kerry, systemd unit `llmv-backend`, port **8092** (verified free 2026-09-06). Owns: SQLite reads/writes, the results-ingest endpoint, the stats endpoints, and the Tailscale reverse-proxy to Ollama. |
-| **Database** | Single SQLite file `/srv/utmcs/llmv/backend/data.db`. Same choice as the DSA sibling. No Postgres — this is a teaching demo with tiny, append-only data. ⚠️ `sqlite3` CLI is **not installed on kerry** (verified 2026-09-06) — install it in Phase 1 or inspect via the app. |
+| **Database** | Single SQLite file `/srv/utmcs/llmv/backend/data.db`. Same choice as the DSA sibling. No Postgres — this is a teaching demo with tiny, append-only data. `sqlite3` 3.45.1 installed on kerry 2026-09-06. ⚠️ The CLI has `foreign_keys` **OFF** by default — see `handover.md` §3.4. |
 | **Auth (v1)** | **nginx basic auth over the entire site** — no application-level login at all. Realm file `/etc/nginx/.htpasswd-llmv`, user `roger`. Matches kerry's existing convention (`.htpasswd-hermes`, `.htpasswd-kerry`, `.htpasswd-workflows`, all verified present 2026-09-06). The fleet standard admin login (`web@gaiada.com`) is **not used** — there is no app login to seed it into. |
 | **Secrets** | Gate password supplied by owner 2026-09-06; stored **only** in `/etc/nginx/.htpasswd-llmv` (bcrypt) on kerry and in `~/Documents/Claude/.secrets/app-pass/`. **Never written into these docs, the repo, or any `NEXT_PUBLIC_*` var** (corpus standard rule 6 + the two prior exposure incidents). |
 | **Persistence (v1)** | Server-side: every benchmark run pushed from the Mac (full result JSON), plus a per-demo run counter, plus every live playground invocation (prompt hash, quant level, timings — **not** the prompt text, see below). Client-side only: the user's in-progress prompt text and chart filter state. |
@@ -77,10 +77,10 @@ Read `architecture.md` before touching anything.
 | **Model + quant ladder** | **Llama 3.2 1B Instruct at exactly three levels: `q2_K`, `q4_K_M`, `q8_0`** — literally as `llm-quant-benchmark-spec.md` specifies. Owner declined the fp16 baseline and the 6-rung ladder 2026-09-06. All three tags verified to exist on the live Ollama registry 2026-09-06 (0.58 / 0.81 / 1.32 GB, **2.71 GB total**). |
 | **Reference constants** | The three quant tags, the three prompts, and the repeat count (3) live in `prompts.json` + a `bench_config.json` on the Mac — not in code, not in the DB. Changing the ladder is a config edit plus a re-run, never a code change. |
 | **Content** | Hardcoded in the frontend as TypeScript constants (the brief text, the concept inventory, the glossary). No CMS. Rationale: the teaching copy changes rarely and is version-controlled prose; a CMS would be pure overhead for three pages. |
-| **Domain** | **`llmv.utmcs.online`** — ⚠️ spelling confirmed with owner. `utmcs.online` is on **GoDaddy** (verified 2026-09-06: present in the 17-domain account, currently **Parked**, no `llmv` and no `dsa` record exists). New A record `llmv` → `187.127.216.146`. Cert via certbot, email `ai@gaiada.com` (fleet norm). |
+| **Domain** | **`llmv.utmcs.online`** — ⚠️ spelling confirmed with owner. `utmcs.online` is on **GoDaddy** (verified 2026-09-06: present in the 17-domain account, currently **Parked**, no `llmv` and no `dsa` record exists). A record `llmv` → `187.127.216.146` **created 2026-09-06**; cert issued (expires 2026-12-05), email `ai@gaiada.com`. |
 | **Email** | **None.** No outbound mail, no forms, no contact path. Nothing to configure. |
 | **Assets** | No images or video in v1. Charts are drawn client-side from JSON. Any future static asset goes in `frontend/public/`. |
-| **Git** | Repo on **kerry at `/srv/utmcs/llmv` = source of truth**. Remote: **`github.com/azlanabas/utm-llmv`** (personal account — owner chose this over `gaiadabali` and `giteai.online` on 2026-09-06, this being coursework rather than agency work). Commit author **Azlan `<azlan@net1io.com>`** — the identity bound to the azlanabas account. Push only when asked. |
+| **Git** | Repo on **kerry at `/srv/utmcs/llmv` = source of truth**. Remote: **`github.com/azlanabas/utmcs_llmv`** (personal account — owner chose this over `gaiadabali` and `giteai.online` on 2026-09-06, this being coursework rather than agency work). ⚠️ **Name corrected 2026-09-06**: this log originally said `utm-llmv`; the live repo is **`utmcs_llmv`**, matching the `utmcs_*` convention already used by `utmcs_dsa`, `utmcs_koop`, `utmcs_faceid`, `utmcs_erpmvp`, `utmcs_blockchain`. Commit author **Azlan `<azlan@net1io.com>`** — the identity bound to the azlanabas account. Push only when asked. |
 | **CI/CD** | **None in v1.** Deploys are manual on-server rebuilds (`handover.md` §3). The fleet's Actions+poller model is overkill for a single-owner teaching app and adds a moving part with no payoff here. |
 | **Brief** | `llm-quant-benchmark-spec.md` is the seed brief for the benchmark half. For everything else — the IA, the playground, the split-brain design — **these docs are the spec.** |
 
@@ -163,4 +163,4 @@ Nothing here is carried over from memory or other hosts.
 
 ---
 
-**Next phase:** `/scaffold utm-llmv` — see `todo.md` for the phase breakdown.
+**Next phase:** `/scaffold utmcs_llmv` — see `todo.md` for the phase breakdown.

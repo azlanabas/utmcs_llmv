@@ -121,7 +121,7 @@ This is the only routine admin task.
 
 ```bash
 # On the Mac
-cd ~/…/utm-llmv/bench
+cd ~/…/utmcs_llmv/bench
 /opt/homebrew/bin/python3 run_benchmark.py     # takes several minutes
 /opt/homebrew/bin/python3 push_results.py      # prints the new run_id
 ```

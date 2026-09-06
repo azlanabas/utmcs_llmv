@@ -18,7 +18,7 @@ Phases map 1:1 to the scaffold runbook so the audit phase can diff plan vs built
 - [x] Compute split resolved (hybrid: push + live proxy) — 2026-09-06
 - [x] IA fixed at 3 pages — 2026-09-06
 - [x] Quant ladder fixed at 3 levels, tags verified against the live registry — 2026-09-06
-- [x] Git remote chosen (`azlanabas/utm-llmv`) — 2026-09-06
+- [x] Git remote chosen (`azlanabas/utmcs_llmv`) — 2026-09-06
 - [x] Gate credential supplied by owner — 2026-09-06
 - [x] Ports chosen from a live survey (3092 / 8092, both verified free) — 2026-09-06
 - [x] Docs corpus authored — 2026-09-06
@@ -152,7 +152,8 @@ Total pull ≈ **2.71 GB** against 110 GB free.
       actual kerry reboot (would disturb 17 other apps — enablement verified instead).
 - [x] Docs flipped to **as-built**: status banners, ticked boxes with dates, `handover.md`  _2026-09-06_
       completed
-- [ ] Git remote `azlanabas/utm-llmv` added and pushed (**only when asked**)
+- [x] Git remote `azlanabas/utmcs_llmv` added and pushed  _2026-09-06_ — commit
+      `90c1ac6`, 52 files, local == origin/main, no secrets tracked
 - [x] Save non-obvious facts (ports, paths, deploy command, creds location) to memory  _2026-09-06_
 
 ---

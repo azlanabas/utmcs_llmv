@@ -40,7 +40,7 @@ verified on 2026-09-06 unless explicitly marked otherwise.
 
 On **the Mac**:
 ```bash
-cd ~/…/utm-llmv/bench          # wherever the repo is checked out locally
+cd ~/…/utmcs_llmv/bench          # wherever the repo is checked out locally
 /opt/homebrew/bin/python3 run_benchmark.py     # ~ several minutes
 /opt/homebrew/bin/python3 push_results.py      # prints the new run_id
 ```
@@ -157,7 +157,7 @@ fails, the probe is broken — not the target.
 
 ## 6. Rebuild from scratch
 
-1. `git clone git@github.com:azlanabas/utm-llmv.git /srv/utmcs/llmv` on kerry.
+1. `git clone git@github.com:azlanabas/utmcs_llmv.git /srv/utmcs/llmv` on kerry.
 2. Recreate `backend/.env` from `.secrets/app-pass/llmv.md`.
 3. `/root/.cargo/bin/cargo build --release`; migrations run at startup.
 4. `npm ci && npm run build` in `frontend/`.
